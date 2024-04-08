@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  reverse-proxy:
+    image: traefik:v2.11
+    restart: always
+    ports:
+      - "80:80"
+      - "8085:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/traefik:/etc/traefik
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  dnsmasq:
+    image: jpillora/dnsmasq
+    restart: always
+    ports:
+      - "53:53/udp"
+      - "5380:8080"
+    volumes:
+      - ${PWD}/dnsmasq.conf:/etc/dnsmasq.conf
+    environment:
+      - HTTP_USER=foo
+      - HTTP_PASS=bar
+    labels:
+      - traefik.http.routers.dnsmasq.rule=Host(`dnsmasq.test`)
+      - traefik.http.services.dnsmasq-traefik.loadbalancer.server.port=8080

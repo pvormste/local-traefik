@@ -1,0 +1,11 @@
+http:
+  routers:
+    example-router:
+      rule: "Host(`example.dev.test`)"
+      service: example-service
+
+  services:
+    example-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8080/"

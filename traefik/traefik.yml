@@ -1,0 +1,14 @@
+entryPoints:
+  web:
+    # Listen on port 80 for incoming requests
+    address: :80
+
+api:
+  dashboard: true
+  insecure: true
+
+providers:
+  # Enable the file provider to define routers / middlewares / services in file
+  file:
+    directory: /etc/traefik/conf
+  docker: {}
